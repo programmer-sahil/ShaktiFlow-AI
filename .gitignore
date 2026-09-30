@@ -1,0 +1,56 @@
+# Dependencies and package-manager state
+node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/versions/
+
+# Next.js and build output
+.next/
+out/
+build/
+dist/
+.vercel/
+
+# Environment variables and secrets; keep the checked-in templates visible
+.env
+.env.*
+!.env.example
+!**/.env.example
+
+# Python environments, bytecode, and test caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Downloaded model weights and temporary uploads
+*.pt
+*.onnx
+uploads/
+**/uploads/
+.uploads/
+tmp/
+temp/
+
+# Logs, generated reports, and OS/editor files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+playwright-report/
+test-results/
+.DS_Store
+Thumbs.db
+*.pem
+*.tsbuildinfo
+next-env.d.ts

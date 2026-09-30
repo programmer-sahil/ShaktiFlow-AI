@@ -1,0 +1,114 @@
+{
+  "name": "ShaktiFlow Critical Crowd Event",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "shaktiflow-crowd-risk",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b9b416ca-22bd-4a04-8c20-35c62cab9d01",
+      "name": "ShaktiFlow Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "6f628e42-9a75-4f0d-9b77-a4fbd3ac4501"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "bf0b3750-b560-4633-85f9-7b84cd0c4ff1",
+              "leftValue": "={{ $json.body.severity }}",
+              "rightValue": "CRITICAL",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "d63e668a-1321-4906-a2b6-2ed5275349b5",
+      "name": "Severity is CRITICAL",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "19ec461a-7fc3-42a4-ae60-b3a91706347a", "name": "event", "value": "={{ $json.body.event }}", "type": "string" },
+            { "id": "a98d6478-3438-4405-969c-06e70e650af5", "name": "severity", "value": "={{ $json.body.severity }}", "type": "string" },
+            { "id": "ca8eb073-2bbd-476b-9509-5748a33729f4", "name": "zone", "value": "={{ $json.body.zone }}", "type": "string" },
+            { "id": "0e3122d4-7610-4db8-a299-ae64a5676be2", "name": "peopleCount", "value": "={{ $json.body.peopleCount }}", "type": "number" },
+            { "id": "c38a848c-904d-443e-bbc4-9ae0f2a5648f", "name": "occupancyPercent", "value": "={{ $json.body.occupancyPercent }}", "type": "number" },
+            { "id": "044784ca-4f70-4739-a9f0-4546425520d8", "name": "riskScore", "value": "={{ $json.body.riskScore }}", "type": "number" },
+            { "id": "bb9bb617-9929-41ef-9b6f-f3959da00c90", "name": "recommendation", "value": "={{ $json.body.recommendation }}", "type": "string" },
+            { "id": "8455e60b-9d47-42fd-becd-6b32685f4646", "name": "timestamp", "value": "={{ $json.body.timestamp }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f82063b4-4d97-4da0-ae86-dfca41b2d60f",
+      "name": "Shape Incident Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { received: true, event: $json.event, severity: $json.severity } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "2fd3732e-4751-4775-8357-0b8a37e9ee06",
+      "name": "Respond Accepted",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { received: false, reason: 'severity_not_critical' } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "1c151628-28a5-445e-8f58-a95dc0f31d54",
+      "name": "Respond Ignored",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [680, 400]
+    }
+  ],
+  "connections": {
+    "ShaktiFlow Webhook": {
+      "main": [[{ "node": "Severity is CRITICAL", "type": "main", "index": 0 }]]
+    },
+    "Severity is CRITICAL": {
+      "main": [
+        [{ "node": "Shape Incident Fields", "type": "main", "index": 0 }],
+        [{ "node": "Respond Ignored", "type": "main", "index": 0 }]
+      ]
+    },
+    "Shape Incident Fields": {
+      "main": [[{ "node": "Respond Accepted", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "89577fa2-21e5-4c35-9fc8-5e7c7cd1944b",
+  "meta": { "templateCredsSetupCompleted": true },
+  "tags": []
+}
