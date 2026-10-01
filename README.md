@@ -63,7 +63,7 @@ The [Ultralytics licensing page](https://www.ultralytics.com/license) describes 
 
 ## n8n Automation
 
-Set `N8N_WEBHOOK_URL` in `backend/.env` to an activated n8n production webhook. A successful 2xx response is shown as **CONNECTED** with a dispatch timestamp. Before a dispatch, the UI uses **STANDBY** for a configured URL; it does not imply reachability. If the URL is missing or a request fails, the UI reports `Automation offline — core monitoring unaffected`.
+Set `N8N_WEBHOOK_URL` in `backend/.env` to an activated n8n production webhook. The backend loads this file automatically from its own directory; restart it after editing `.env`. The Automation card shows **READY** for a configured URL before any dispatch, **CONNECTED** after n8n returns 2xx, **ERROR** after a failed dispatch, **OFFLINE** when unconfigured, and **UNAVAILABLE** when the backend status cannot be read. READY does not imply webhook reachability.
 
 The starter workflow and setup walkthrough are in [`automation/`](automation/n8n-workflow.md). Optional Discord, Telegram, or Email credentials belong in n8n's credential manager and must not be committed here.
 
@@ -119,7 +119,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
 cp .env.example .env
-uvicorn app:app --reload --env-file .env --host 127.0.0.1 --port 8000
+uvicorn app:app --reload --host 127.0.0.1 --port 8000
 
 # Optional: local recommendation model, in another terminal
 ollama serve
@@ -151,7 +151,7 @@ Analysis returns `peopleCount`, `riskLevel`, `riskScore`, `occupancyPercent`, `c
 Webhook dispatch returns one of the following states:
 
 ```json
-{"status":"dispatched","dispatchedAt":"2026-10-01T12:42:08+05:30","detail":null}
+{"status":"dispatched","configured":true,"webhookConfigured":true,"lastDispatchStatus":"success","lastDispatchAt":"2026-10-01T12:42:08+05:30","dispatchedAt":"2026-10-01T12:42:08+05:30","detail":null}
 ```
 
 `dispatched` means the webhook returned an HTTP 2xx response. ShaktiFlow does not claim that optional downstream notifications were delivered or acknowledged.

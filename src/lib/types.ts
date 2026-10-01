@@ -18,7 +18,23 @@ export interface CrowdAnalysisResult {
   confidence: number;
   processingMs: number;
   coordinatesNormalized: boolean;
+  crowdPresence?: "NONE" | "LIGHT" | "MODERATE" | "DENSE";
+  configuredCapacity?: number;
+  frameBoxOccupancyPercent?: number;
   detections: PersonDetection[];
+}
+
+export interface SessionAnalysis {
+  id: string;
+  timestamp: string;
+  peopleCount: number;
+  occupancyPercent: number;
+  riskScore: number;
+  confidence: number;
+  processingMs: number;
+  riskLevel: CrowdAnalysisResult["riskLevel"];
+  recommendationState?: "MODEL" | "RULE-BASED FALLBACK";
+  automationState?: AutomationStatus["status"];
 }
 
 export interface PersonDetection {
@@ -37,7 +53,11 @@ export interface RecommendationResult {
 }
 
 export interface AutomationStatus {
-  status: "dispatched" | "offline" | "not_triggered" | "standby";
+  status: "OFFLINE" | "READY" | "CONNECTED" | "ERROR" | "UNAVAILABLE" | "dispatched" | "offline" | "not_triggered";
+  configured: boolean;
+  webhookConfigured: boolean;
+  lastDispatchStatus: "success" | "failed" | null;
+  lastDispatchAt: string | null;
   dispatchedAt: string | null;
   detail: string | null;
 }
