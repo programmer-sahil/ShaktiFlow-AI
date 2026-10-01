@@ -4,6 +4,18 @@ Privacy-preserving AI crowd intelligence that turns camera data into operational
 
 ShaktiFlow is a hackathon MVP command center for image-based, anonymous person counting, prototype crowd-risk scoring, local operational recommendations, and optional n8n incident workflows. It is decision support for operators, not an emergency response or safety certification system.
 
+# Output UI
+
+<img width="1463" height="676" alt="image" src="https://github.com/user-attachments/assets/9c19e87d-128f-48dc-b2a8-b3e5f015a7c1" />
+<img width="1229" height="448" alt="image" src="https://github.com/user-attachments/assets/c8ca8e29-0665-42a3-92f8-52e729a64108" />
+
+
+
+# N8N Automation (what added in this project)
+
+<img width="1273" height="644" alt="image" src="https://github.com/user-attachments/assets/fe11c7c6-3793-47b2-a1de-7d54fbe2521d" />
+
+
 ## Problem
 
 At busy public gatherings, operators may have limited time and visibility to notice crowd build-up across gates and shared areas. A slow or fragmented view can make it harder to decide when to meter entry or review a zone.
